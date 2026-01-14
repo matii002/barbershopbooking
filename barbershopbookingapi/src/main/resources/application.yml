@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /barbershopbookingapi
+spring:
+  application:
+    name: barbershopbookingapi
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  web:
+    error:
+      include-exception: true
+      include-binding-errors: always
+      include-message: always
+      include-stacktrace: always
+
+
