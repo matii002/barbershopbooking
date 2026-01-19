@@ -6,10 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,7 +23,8 @@ public class ServiceEntity {
     private String name;
     @Column(nullable = false)
     private int durationMinutes;
-    private double price;
+    @Column(nullable = false)
+    private BigDecimal price;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
     private LocalDateTime modificationDate;

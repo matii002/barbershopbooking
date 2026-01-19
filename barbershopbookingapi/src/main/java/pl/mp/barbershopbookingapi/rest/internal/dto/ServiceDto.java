@@ -3,14 +3,16 @@ package pl.mp.barbershopbookingapi.rest.internal.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class BookingDto {
+public class ServiceDto {
     private int id;
-    private LocalDateTime startTime;
-    private String status;
+    private String name;
+    private int durationMinutes;
+    private BigDecimal price;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
 }
