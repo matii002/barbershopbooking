@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pl.mp.barbershopbookingapi.infrastructure.Status;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,8 @@ public class BookingEntity {
     @Column(nullable = false)
     private LocalDateTime startTime;
     @Column(nullable = false)
-    private String status;//utworzyć ENUM ze statusami
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
     private LocalDateTime modificationDate;
@@ -29,7 +31,4 @@ public class BookingEntity {
     private void onUpdate() {
         modificationDate = LocalDateTime.now();
     }
-    //private ClientEntity client;
-    //private EmployeeEntity employee;
-    //private ServiceEntity service;
 }
