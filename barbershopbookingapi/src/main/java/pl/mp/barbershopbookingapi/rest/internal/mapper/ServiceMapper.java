@@ -8,7 +8,6 @@ import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateServiceRequest
 
 @Component
 public class ServiceMapper {
-    //    create
     public ServiceEntity toServiceEntity(final CreateServiceRequest createServiceRequest) {
         return ServiceEntity.builder()
                 .name(createServiceRequest.getName())
@@ -17,7 +16,6 @@ public class ServiceMapper {
                 .build();
     }
 
-    //    update
     public ServiceEntity toServiceEntity(final UpdateServiceRequest updateServiceRequest, final ServiceEntity serviceEntity) {
         return serviceEntity.toBuilder()
                 .id(updateServiceRequest.getId())
@@ -27,13 +25,12 @@ public class ServiceMapper {
                 .build();
     }
 
-    //    find
-    public ServiceDto toServiceDto(final UpdateServiceRequest updateServiceRequest) {
+    public ServiceDto toServiceDto(final ServiceEntity serviceEntity) {
         return ServiceDto.builder()
-                .id(updateServiceRequest.getId())
-                .name(updateServiceRequest.getName())
-                .durationMinutes(updateServiceRequest.getDurationMinutes())
-                .price(updateServiceRequest.getPrice())
+                .id(serviceEntity.getId())
+                .name(serviceEntity.getName())
+                .durationMinutes(serviceEntity.getDurationMinutes())
+                .price(serviceEntity.getPrice())
                 .build();
     }
 }
