@@ -1,11 +1,13 @@
 package pl.mp.barbershopbookingapi.rest.internal.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.ServiceDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateServiceRequest;
@@ -38,7 +40,10 @@ public class BarberServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createBarberService(@RequestBody CreateServiceRequest createServiceRequest) {
+    public ResponseEntity<String> createBarberService(@Valid @RequestBody CreateServiceRequest createServiceRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Service validation failed");
+        }
         serviceBarberService.createBarber(createServiceRequest);
 
         log.info("Barber service created");
@@ -47,7 +52,11 @@ public class BarberServiceController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBarberService(@RequestBody UpdateServiceRequest updateServiceRequest) {
+    public ResponseEntity<String> updateBarberService(@Valid @RequestBody UpdateServiceRequest updateServiceRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Service update validation failed");
+        }
+
         serviceBarberService.updateBarber(updateServiceRequest);
 
         log.info("Barber service updated");

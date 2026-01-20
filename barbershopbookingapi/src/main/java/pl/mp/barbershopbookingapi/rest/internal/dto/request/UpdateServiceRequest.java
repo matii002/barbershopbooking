@@ -18,5 +18,6 @@ public class UpdateServiceRequest {
     @NotNull(message = "durationMinutes is required")
     private Integer durationMinutes;
     @Digits(message = "price should be valid", integer = 10, fraction = 2)
+    @NotNull(message = "price can not be null")
     private BigDecimal price;
 }

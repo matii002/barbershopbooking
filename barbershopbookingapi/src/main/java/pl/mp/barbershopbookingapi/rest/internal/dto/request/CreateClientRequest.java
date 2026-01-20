@@ -1,9 +1,6 @@
 package pl.mp.barbershopbookingapi.rest.internal.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 @Getter
@@ -17,8 +14,10 @@ public class CreateClientRequest {
     @Pattern(regexp = "^\\p{Lu}\\p{Ll}+$", message = "lastName should be valid")
     private String lastName;
     @Email(message = "email should be valid")
+    @NotBlank(message = "email can not be blank")
     private String email;
     @Pattern(regexp = "^(\\+?[0-9]{2})?[0-9]{9}$", message = "phone should be valid")
     @Size(min = 9, max = 20, message = "max length is 20")
+    @NotNull(message = "phone number can not be null")
     private String phone;
 }

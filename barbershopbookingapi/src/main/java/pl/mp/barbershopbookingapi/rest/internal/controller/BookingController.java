@@ -1,11 +1,13 @@
 package pl.mp.barbershopbookingapi.rest.internal.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
@@ -38,7 +40,11 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createBooking(@RequestBody CreateBookingRequest createBookingRequest) {
+    public ResponseEntity<String> createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Booking validation failed");
+        }
+
         bookingService.createBooking(createBookingRequest);
 
         log.info("Booked");
@@ -47,7 +53,11 @@ public class BookingController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBooking(@RequestBody UpdateBookingRequest updateBookingRequest) {
+    public ResponseEntity<String> updateBooking(@Valid @RequestBody UpdateBookingRequest updateBookingRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Booking update validation failed");
+        }
+
         bookingService.updateBooking(updateBookingRequest);
 
         log.info("Booking updated");
