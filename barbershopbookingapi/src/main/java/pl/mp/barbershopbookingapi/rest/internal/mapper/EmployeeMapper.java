@@ -37,6 +37,8 @@ public class EmployeeMapper {
                 .lastName(employeeEntity.getLastName())
                 .email(employeeEntity.getEmail())
                 .phone(employeeEntity.getPhone())
+                .creationDate(employeeEntity.getCreationDate())
+                .modificationDate(employeeEntity.getModificationDate())
                 .build();
     }
 }

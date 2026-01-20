@@ -27,17 +27,17 @@ public class ClientService {
         return clientRepository.findById(id).map(clientMapper::toClientDto);
     }
 
-    public ClientDto createClient(CreateClientRequest createClientRequest) {
-        return clientMapper.toClientDto(
+    public void createClient(CreateClientRequest createClientRequest) {
+        clientMapper.toClientDto(
                 clientRepository.save(
                         clientMapper.toClientEntity(createClientRequest)
                 )
         );
     }
 
-    public ClientDto updateClient(UpdateClientRequest updateClientRequest) {
+    public void updateClient(UpdateClientRequest updateClientRequest) {
         ClientEntity clientEntity = clientRepository.findById(updateClientRequest.getId()).orElseThrow();
-        return clientMapper.toClientDto(
+        clientMapper.toClientDto(
                 clientRepository.save(
                         clientMapper.toClientEntity(updateClientRequest, clientEntity)
                 )

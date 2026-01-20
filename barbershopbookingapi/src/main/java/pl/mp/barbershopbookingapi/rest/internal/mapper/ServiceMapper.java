@@ -31,6 +31,8 @@ public class ServiceMapper {
                 .name(serviceEntity.getName())
                 .durationMinutes(serviceEntity.getDurationMinutes())
                 .price(serviceEntity.getPrice())
+                .creationDate(serviceEntity.getCreationDate())
+                .modificationDate(serviceEntity.getModificationDate())
                 .build();
     }
 }

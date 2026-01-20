@@ -27,15 +27,15 @@ public class BookingService {
         return bookingRepository.findById(id).map(bookingMapper::toBookingDto);
     }
 
-    public BookingDto createBooking(CreateBookingRequest createBookingRequest) {
-        return bookingMapper.toBookingDto(bookingRepository.save(bookingMapper.toBookingEntity(createBookingRequest)));
+    public void createBooking(CreateBookingRequest createBookingRequest) {
+        bookingMapper.toBookingDto(bookingRepository.save(bookingMapper.toBookingEntity(createBookingRequest)));
     }
 
-    public BookingDto updateBooking(UpdateBookingRequest updateBookingRequest) {
+    public void updateBooking(UpdateBookingRequest updateBookingRequest) {
         BookingEntity bookingEntity = bookingRepository.findById(updateBookingRequest.getId()).orElseThrow();
-        return bookingMapper.toBookingDto(
+        bookingMapper.toBookingDto(
                 bookingRepository.save(
-                bookingMapper.toBookingEntity(updateBookingRequest, bookingEntity)));
+                        bookingMapper.toBookingEntity(updateBookingRequest, bookingEntity)));
     }
 
     public void deleteBooking(Integer id) {

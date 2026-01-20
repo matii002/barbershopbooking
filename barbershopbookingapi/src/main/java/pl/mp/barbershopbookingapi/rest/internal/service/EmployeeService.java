@@ -27,17 +27,17 @@ public class EmployeeService {
         return employeeRepository.findById(id).map(employeeMapper::toEmployeeDto);
     }
 
-    public EmployeeDto createEmployee(CreateEmployeeRequest createEmployeeRequest) {
-        return employeeMapper.toEmployeeDto(
+    public void createEmployee(CreateEmployeeRequest createEmployeeRequest) {
+        employeeMapper.toEmployeeDto(
                 employeeRepository.save(
                         employeeMapper.toEmployeeEntity(createEmployeeRequest)
                 )
         );
     }
 
-    public EmployeeDto updateEmployee(UpdateEmployeeRequest updateEmployeeRequest) {
+    public void updateEmployee(UpdateEmployeeRequest updateEmployeeRequest) {
         EmployeeEntity employeeEntity = employeeRepository.findById(updateEmployeeRequest.getId()).orElseThrow();
-        return employeeMapper.toEmployeeDto(
+        employeeMapper.toEmployeeDto(
                 employeeRepository.save(
                         employeeMapper.toEmployeeEntity(updateEmployeeRequest, employeeEntity)
                 )

@@ -37,6 +37,8 @@ public class ClientMapper {
                 .lastName(clientEntity.getLastName())
                 .email(clientEntity.getEmail())
                 .phone(clientEntity.getPhone())
+                .creationDate(clientEntity.getCreationDate())
+                .modificationDate(clientEntity.getModificationDate())
                 .build();
     }
 }
