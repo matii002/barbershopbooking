@@ -8,13 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.ClientDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateClientRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateClientRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.ClientService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,9 +43,13 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createClient(@Valid @RequestBody CreateClientRequest createClientRequest, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Client validation failed");
+    public ResponseEntity<?> createClient(@Valid @RequestBody CreateClientRequest createClientRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         clientService.createClient(createClientRequest);
@@ -53,9 +60,13 @@ public class ClientController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateClient(@Valid @RequestBody UpdateClientRequest updateClientRequest, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Client update validation failed");
+    public ResponseEntity<?> updateClient(@Valid @RequestBody UpdateClientRequest updateClientRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         clientService.updateClient(updateClientRequest);

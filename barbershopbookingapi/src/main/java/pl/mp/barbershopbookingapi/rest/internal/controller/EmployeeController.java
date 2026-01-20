@@ -8,13 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.EmployeeDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.EmployeeService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,9 +43,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createEmployee(@Valid @RequestBody CreateEmployeeRequest createEmployeeRequest, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Employee validation failed");
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody CreateEmployeeRequest createEmployeeRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         employeeService.createEmployee(createEmployeeRequest);
@@ -53,9 +60,13 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateEmployee(@Valid @RequestBody UpdateEmployeeRequest updateEmployeeRequest, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Employee update validation failed");
+    public ResponseEntity<?> updateEmployee(@Valid @RequestBody UpdateEmployeeRequest updateEmployeeRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         employeeService.updateEmployee(updateEmployeeRequest);

@@ -8,13 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.ServiceDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateServiceRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateServiceRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.ServiceBarberService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,9 +43,13 @@ public class BarberServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createBarberService(@Valid @RequestBody CreateServiceRequest createServiceRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> createBarberService(@Valid @RequestBody CreateServiceRequest createServiceRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Service validation failed");
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
         serviceBarberService.createBarber(createServiceRequest);
 
@@ -52,9 +59,13 @@ public class BarberServiceController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBarberService(@Valid @RequestBody UpdateServiceRequest updateServiceRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> updateBarberService(@Valid @RequestBody UpdateServiceRequest updateServiceRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Service update validation failed");
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         serviceBarberService.updateBarber(updateServiceRequest);

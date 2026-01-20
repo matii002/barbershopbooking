@@ -8,13 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.BookingService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,9 +43,13 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Booking validation failed");
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         bookingService.createBooking(createBookingRequest);
@@ -53,9 +60,13 @@ public class BookingController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateBooking(@Valid @RequestBody UpdateBookingRequest updateBookingRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> updateBooking(@Valid @RequestBody UpdateBookingRequest updateBookingRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("Booking update validation failed");
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
 
         bookingService.updateBooking(updateBookingRequest);
