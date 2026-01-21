@@ -19,7 +19,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/barbershop_booking_db
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: 
+    username:
     password:
     hikari:
       maximum-pool-size: 20

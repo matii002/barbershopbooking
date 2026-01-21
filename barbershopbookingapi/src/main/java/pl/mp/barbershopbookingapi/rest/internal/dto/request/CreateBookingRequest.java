@@ -14,4 +14,10 @@ public class CreateBookingRequest {
     private LocalDateTime startTime;
     @NotNull(message = "status is required")
     private Status status;
+    @NotNull(message = "clientId is required")
+    private Integer clientId;
+    @NotNull(message = "employeeId is required")
+    private Integer employeeId;
+    @NotNull(message = "serviceId is required")
+    private Integer serviceId;
 }

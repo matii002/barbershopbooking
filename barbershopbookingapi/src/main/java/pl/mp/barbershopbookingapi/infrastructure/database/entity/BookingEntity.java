@@ -31,4 +31,14 @@ public class BookingEntity {
     private void onUpdate() {
         modificationDate = LocalDateTime.now();
     }
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private EmployeeEntity employee;
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private ServiceEntity service;
 }

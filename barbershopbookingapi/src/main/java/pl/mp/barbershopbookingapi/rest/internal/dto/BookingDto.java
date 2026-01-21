@@ -11,6 +11,12 @@ public class BookingDto {
     private int id;
     private LocalDateTime startTime;
     private String status;
+    private int clientId;
+    private String clientName;
+    private int employeeId;
+    private String employeeName;
+    private int serviceId;
+    private String serviceName;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
 }

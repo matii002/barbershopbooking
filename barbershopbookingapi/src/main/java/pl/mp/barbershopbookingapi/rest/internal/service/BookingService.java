@@ -5,7 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.BookingEntity;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.ClientEntity;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.ServiceEntity;
 import pl.mp.barbershopbookingapi.infrastructure.database.repository.BookingRepository;
+import pl.mp.barbershopbookingapi.infrastructure.database.repository.ClientRepository;
+import pl.mp.barbershopbookingapi.infrastructure.database.repository.EmployeeRepository;
+import pl.mp.barbershopbookingapi.infrastructure.database.repository.ServiceRepository;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
@@ -17,6 +23,9 @@ import java.util.Optional;
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
+    private final ClientRepository clientRepository;
+    private final EmployeeRepository employeeRepository;
+    private final ServiceRepository serviceRepository;
     private final BookingMapper bookingMapper;
 
     public Page<BookingDto> getAllBooking(Pageable pageable) {
@@ -28,14 +37,38 @@ public class BookingService {
     }
 
     public void createBooking(CreateBookingRequest createBookingRequest) {
-        bookingMapper.toBookingDto(bookingRepository.save(bookingMapper.toBookingEntity(createBookingRequest)));
+        ClientEntity client = clientRepository.findById(createBookingRequest.getClientId()).orElseThrow();
+        EmployeeEntity employee = employeeRepository.findById(createBookingRequest.getEmployeeId()).orElseThrow();
+        ServiceEntity service = serviceRepository.findById(createBookingRequest.getServiceId()).orElseThrow();
+
+        bookingMapper.toBookingDto(bookingRepository.save(
+                        bookingMapper.toBookingEntity(
+                                createBookingRequest,
+                                client,
+                                employee,
+                                service
+                        )
+                )
+        );
     }
 
     public void updateBooking(UpdateBookingRequest updateBookingRequest) {
+        ClientEntity client = clientRepository.findById(updateBookingRequest.getClientId()).orElseThrow();
+        EmployeeEntity employee = employeeRepository.findById(updateBookingRequest.getEmployeeId()).orElseThrow();
+        ServiceEntity service = serviceRepository.findById(updateBookingRequest.getServiceId()).orElseThrow();
+
         BookingEntity bookingEntity = bookingRepository.findById(updateBookingRequest.getId()).orElseThrow();
         bookingMapper.toBookingDto(
                 bookingRepository.save(
-                        bookingMapper.toBookingEntity(updateBookingRequest, bookingEntity)));
+                        bookingMapper.toBookingEntity(
+                                updateBookingRequest,
+                                bookingEntity,
+                                client,
+                                employee,
+                                service
+                        )
+                )
+        );
     }
 
     public void deleteBooking(Integer id) {
