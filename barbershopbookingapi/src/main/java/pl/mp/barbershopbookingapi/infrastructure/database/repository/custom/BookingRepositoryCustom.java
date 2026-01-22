@@ -10,5 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepositoryCustom {
-    List<BookingEntity> findBookingByFilters(LocalDateTime startTime, Status status, ClientEntity client, EmployeeEntity employee, ServiceEntity service);
+    List<BookingEntity> findBookingByFilters(
+            LocalDateTime startTime,
+            Status status,
+            ClientEntity client,
+            EmployeeEntity employee,
+            ServiceEntity service
+    );
 }

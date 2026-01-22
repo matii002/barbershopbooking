@@ -22,26 +22,32 @@ import java.util.List;
 public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
     private final EntityManager em;
 
-    public List<BookingEntity> findBookingByFilters(LocalDateTime startTime, Status status, ClientEntity client, EmployeeEntity employee, ServiceEntity service) {
+    public List<BookingEntity> findBookingByFilters(
+            LocalDateTime startTime,
+            Status status,
+            ClientEntity client,
+            EmployeeEntity employee,
+            ServiceEntity service
+    ) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<BookingEntity> cq = cb.createQuery(BookingEntity.class);
 
         Root<BookingEntity> booking = cq.from(BookingEntity.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if(startTime != null) {
+        if (startTime != null) {
             predicates.add(cb.equal(booking.get("startTime"), startTime));
         }
-        if(status != null) {
+        if (status != null) {
             cb.equal(booking.get("status"), status);
         }
-        if(client != null) {
+        if (client != null) {
             cb.equal(booking.get("client"), client);
         }
-        if(employee != null) {
+        if (employee != null) {
             cb.equal(booking.get("employee"), employee);
         }
-        if(service != null) {
+        if (service != null) {
             cb.equal(booking.get("service"), service);
         }
 

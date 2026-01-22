@@ -11,7 +11,9 @@ import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateEmployeeReques
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.mapper.EmployeeMapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +25,12 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto);
     }
 
+    public List<EmployeeDto> get4MatchedEmployee(String firstName, String lastName) {
+        return employeeRepository.findTop4ByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName)
+                .stream()
+                .map(employeeMapper::toEmployeeDto)
+                .collect(Collectors.toList());
+    }
     public Optional<EmployeeDto> getEmployeeById(Integer id) {
         return employeeRepository.findById(id).map(employeeMapper::toEmployeeDto);
     }

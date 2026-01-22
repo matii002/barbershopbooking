@@ -31,6 +31,11 @@ public class EmployeeController {
         return employeeService.getAllEmployees(pageable);
     }
 
+    @GetMapping("/search")
+    public List<EmployeeDto> get4MatchedEmployee(@RequestParam String firstName, @RequestParam String lastName) {
+        return employeeService.get4MatchedEmployee(firstName, lastName);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployeeById(@PathVariable("id") Integer id) {
         Optional<EmployeeDto> employee = employeeService.getEmployeeById(id);

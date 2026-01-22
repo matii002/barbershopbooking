@@ -31,6 +31,11 @@ public class ClientController {
         return clientService.getAllClients(pageable);
     }
 
+    @GetMapping("/search")
+    public List<ClientDto> get4MatchedClient(@RequestParam String firstName, @RequestParam String lastName) {
+        return clientService.get4MatchedClients(firstName, lastName);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable("id") Integer id) {
         Optional<ClientDto> client = clientService.getClientById(id);

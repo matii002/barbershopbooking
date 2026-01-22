@@ -26,6 +26,16 @@ import java.util.stream.Collectors;
 public class BarberServiceController {
     private final ServiceBarberService serviceBarberService;
 
+    @GetMapping
+    public Page<ServiceDto> getAllBarberServices(Pageable pageable) {
+        return serviceBarberService.getAllBarberServices(pageable);
+    }
+
+    @GetMapping("/search")
+    public List<ServiceDto> get4MatchedBarberServices(@RequestParam String service) {
+        return serviceBarberService.get4MatchedBarberServices(service);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getBarberServiceById(@PathVariable("id") Integer id) {
         Optional<ServiceDto> service = serviceBarberService.getBarberServiceById(id);

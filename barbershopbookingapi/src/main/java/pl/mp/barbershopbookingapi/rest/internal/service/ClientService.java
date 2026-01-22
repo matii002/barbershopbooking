@@ -11,7 +11,9 @@ import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateClientRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateClientRequest;
 import pl.mp.barbershopbookingapi.rest.internal.mapper.ClientMapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +23,14 @@ public class ClientService {
 
     public Page<ClientDto> getAllClients(Pageable pageable) {
         return clientRepository.findAll(pageable).map(clientMapper::toClientDto);
+    }
+
+    public List<ClientDto> get4MatchedClients(String firstName, String lastName) {
+        return clientRepository
+                .findTop4ByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName)
+                .stream()
+                .map(clientMapper::toClientDto)
+                .collect(Collectors.toList());
     }
 
     public Optional<ClientDto> getClientById(Integer id) {
