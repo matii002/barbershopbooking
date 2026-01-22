@@ -19,7 +19,7 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 
-    public Page<ClientDto> getAllClient(Pageable pageable) {
+    public Page<ClientDto> getAllClients(Pageable pageable) {
         return clientRepository.findAll(pageable).map(clientMapper::toClientDto);
     }
 

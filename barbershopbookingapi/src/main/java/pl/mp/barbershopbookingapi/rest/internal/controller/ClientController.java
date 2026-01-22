@@ -27,8 +27,8 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public Page<ClientDto> getAllClient(Pageable pageable) {
-        return clientService.getAllClient(pageable);
+    public Page<ClientDto> getAllClients(Pageable pageable) {
+        return clientService.getAllClients(pageable);
     }
 
     @GetMapping("/{id}")

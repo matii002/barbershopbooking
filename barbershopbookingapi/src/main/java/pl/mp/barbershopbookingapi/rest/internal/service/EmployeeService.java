@@ -19,7 +19,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
 
-    public Page<EmployeeDto> getAllEmployee(Pageable pageable) {
+    public Page<EmployeeDto> getAllEmployees(Pageable pageable) {
         return employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto);
     }
 

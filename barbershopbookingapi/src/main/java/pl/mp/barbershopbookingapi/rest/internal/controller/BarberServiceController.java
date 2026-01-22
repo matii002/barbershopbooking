@@ -26,11 +26,6 @@ import java.util.stream.Collectors;
 public class BarberServiceController {
     private final ServiceBarberService serviceBarberService;
 
-    @GetMapping
-    public Page<ServiceDto> getAllBarberService(Pageable pageable) {
-        return serviceBarberService.getAllBarberService(pageable);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getBarberServiceById(@PathVariable("id") Integer id) {
         Optional<ServiceDto> service = serviceBarberService.getBarberServiceById(id);

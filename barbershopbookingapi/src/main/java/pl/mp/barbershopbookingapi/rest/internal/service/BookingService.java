@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.mp.barbershopbookingapi.infrastructure.Status;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.BookingEntity;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.ClientEntity;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
@@ -17,7 +18,10 @@ import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.mapper.BookingMapper;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,8 +32,14 @@ public class BookingService {
     private final ServiceRepository serviceRepository;
     private final BookingMapper bookingMapper;
 
-    public Page<BookingDto> getAllBooking(Pageable pageable) {
+    public Page<BookingDto> getAllBookings(Pageable pageable) {
         return bookingRepository.findAll(pageable).map(bookingMapper::toBookingDto);
+    }
+
+    public List<BookingDto> getFilteredBookings(LocalDateTime startTime, Status status, ClientEntity client, EmployeeEntity employee, ServiceEntity service) {
+        List<BookingEntity> filteredBookings = bookingRepository.findBookingByFilters(startTime, status, client, employee, service);
+
+        return filteredBookings.stream().map(bookingMapper::toBookingDto).collect(Collectors.toList());
     }
 
     public Optional<BookingDto> getBookingById(Integer id) {

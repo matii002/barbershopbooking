@@ -27,8 +27,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public Page<EmployeeDto> getAllEmployee(Pageable pageable) {
-        return employeeService.getAllEmployee(pageable);
+    public Page<EmployeeDto> getAllEmployees(Pageable pageable) {
+        return employeeService.getAllEmployees(pageable);
     }
 
     @GetMapping("/{id}")

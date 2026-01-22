@@ -10,11 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import pl.mp.barbershopbookingapi.infrastructure.Status;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.ClientEntity;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
+import pl.mp.barbershopbookingapi.infrastructure.database.entity.ServiceEntity;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.BookingService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,9 +31,19 @@ import java.util.stream.Collectors;
 public class BookingController {
     private final BookingService bookingService;
 
+    @GetMapping("/all")
+    public Page<BookingDto> getAllBookings(Pageable pageable) {
+        return bookingService.getAllBookings(pageable);
+    }
+
     @GetMapping
-    public Page<BookingDto> getAllBooking(Pageable pageable) {
-        return bookingService.getAllBooking(pageable);
+    public List<BookingDto> getFilteredBookings(
+            @RequestParam(value = "startTime", required = false) LocalDateTime startTime,
+            @RequestParam(value = "status", required = false) Status status,
+            @RequestParam(value = "client", required = false) ClientEntity client,
+            @RequestParam(value = "employee", required = false) EmployeeEntity employee,
+            @RequestParam(value = "service", required = false) ServiceEntity service) {
+        return bookingService.getFilteredBookings(startTime, status, client, employee, service);
     }
 
     @GetMapping("/{id}")
