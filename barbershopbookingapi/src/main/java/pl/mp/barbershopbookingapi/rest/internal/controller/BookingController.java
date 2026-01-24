@@ -5,15 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.infrastructure.Status;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.ClientEntity;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.ServiceEntity;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
@@ -38,12 +36,19 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getFilteredBookings(
-            @RequestParam(value = "startTime", required = false) LocalDateTime startTime,
+            @RequestParam(value = "startTime", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
             @RequestParam(value = "status", required = false) Status status,
-            @RequestParam(value = "client", required = false) ClientEntity client,
-            @RequestParam(value = "employee", required = false) EmployeeEntity employee,
-            @RequestParam(value = "service", required = false) ServiceEntity service) {
-        return bookingService.getFilteredBookings(startTime, status, client, employee, service);
+            @RequestParam(value = "client", required = false) String client,
+            @RequestParam(value = "employee", required = false) String employee,
+            @RequestParam(value = "service", required = false) String service) {
+        return bookingService.getFilteredBookings(
+                startTime,
+                status,
+                client,
+                employee,
+                service
+        );
     }
 
     @GetMapping("/{id}")

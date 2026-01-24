@@ -9,9 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.mp.barbershopbookingapi.infrastructure.Status;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.BookingEntity;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.ClientEntity;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
-import pl.mp.barbershopbookingapi.infrastructure.database.entity.ServiceEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,9 +22,9 @@ public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
     public List<BookingEntity> findBookingByFilters(
             LocalDateTime startTime,
             Status status,
-            ClientEntity client,
-            EmployeeEntity employee,
-            ServiceEntity service
+            String client,
+            String employee,
+            String service
     ) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<BookingEntity> cq = cb.createQuery(BookingEntity.class);
@@ -39,16 +36,32 @@ public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
             predicates.add(cb.equal(booking.get("startTime"), startTime));
         }
         if (status != null) {
-            cb.equal(booking.get("status"), status);
+            predicates.add(cb.equal(booking.get("status"), status));
         }
         if (client != null) {
-            cb.equal(booking.get("client"), client);
+            String[] parts = client.trim().split("\\s", 2);
+            String firstName = parts[0];
+            String lastName = parts.length > 1 ? parts[1] : null;
+
+            predicates.add(cb.like(booking.get("client").get("firstName"), firstName.toLowerCase() + "%"));
+
+            if (lastName != null) {
+                predicates.add(cb.like(booking.get("client").get("lastName"), lastName.toLowerCase() + "%"));
+            }
         }
         if (employee != null) {
-            cb.equal(booking.get("employee"), employee);
+            String[] parts = employee.trim().split("\\s", 2);
+            String firstName = parts[0];
+            String lastName = parts.length > 1 ? parts[1] : null;
+
+            predicates.add(cb.like(booking.get("employee").get("firstName"), firstName.toLowerCase() + "%"));
+
+            if (lastName != null) {
+                predicates.add(cb.like(booking.get("employee").get("lastName"), lastName.toLowerCase() + "%"));
+            }
         }
         if (service != null) {
-            cb.equal(booking.get("service"), service);
+            predicates.add(cb.like(booking.get("service").get("name"), service.toLowerCase() + "%"));
         }
 
         cq.where(predicates.toArray(new Predicate[0]));

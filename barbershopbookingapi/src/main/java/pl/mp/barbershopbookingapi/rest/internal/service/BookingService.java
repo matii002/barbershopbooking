@@ -36,8 +36,20 @@ public class BookingService {
         return bookingRepository.findAll(pageable).map(bookingMapper::toBookingDto);
     }
 
-    public List<BookingDto> getFilteredBookings(LocalDateTime startTime, Status status, ClientEntity client, EmployeeEntity employee, ServiceEntity service) {
-        List<BookingEntity> filteredBookings = bookingRepository.findBookingByFilters(startTime, status, client, employee, service);
+    public List<BookingDto> getFilteredBookings(
+            LocalDateTime startTime,
+            Status status,
+            String client,
+            String employee,
+            String service
+    ) {
+        List<BookingEntity> filteredBookings = bookingRepository.findBookingByFilters(
+                startTime,
+                status,
+                client,
+                employee,
+                service
+        );
 
         return filteredBookings.stream().map(bookingMapper::toBookingDto).collect(Collectors.toList());
     }
