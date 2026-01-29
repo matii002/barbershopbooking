@@ -14,6 +14,7 @@ import pl.mp.barbershopbookingapi.infrastructure.database.repository.ClientRepos
 import pl.mp.barbershopbookingapi.infrastructure.database.repository.EmployeeRepository;
 import pl.mp.barbershopbookingapi.infrastructure.database.repository.ServiceRepository;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
+import pl.mp.barbershopbookingapi.rest.internal.dto.PageDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.mapper.BookingMapper;
@@ -30,11 +31,11 @@ public class BookingService {
     private final ServiceRepository serviceRepository;
     private final BookingMapper bookingMapper;
 
-    public Page<BookingDto> getAllBookings(Pageable pageable) {
-        return bookingRepository.findAll(pageable).map(bookingMapper::toBookingDto);
+    public PageDto<BookingDto> getAllBookings(Pageable pageable) {
+        return new PageDto<>(bookingRepository.findAll(pageable).map(bookingMapper::toBookingDto));
     }
 
-    public Page<BookingDto> getFilteredBookings(
+    public PageDto<BookingDto> getFilteredBookings(
             Pageable pageable,
             LocalDateTime startTime,
             Status status,
@@ -51,7 +52,7 @@ public class BookingService {
                 service
         );
 
-        return filteredBookings.map(bookingMapper::toBookingDto);
+        return new PageDto<BookingDto>(filteredBookings.map(bookingMapper::toBookingDto));
     }
 
     public Optional<BookingDto> getBookingById(Integer id) {

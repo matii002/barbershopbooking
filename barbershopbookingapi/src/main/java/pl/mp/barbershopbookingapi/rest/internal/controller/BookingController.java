@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.infrastructure.Status;
 import pl.mp.barbershopbookingapi.rest.internal.dto.BookingDto;
+import pl.mp.barbershopbookingapi.rest.internal.dto.PageDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.BookingService;
@@ -31,13 +31,13 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping("/all")
-    public Page<BookingDto> getAllBookings(Pageable pageable) {
+    public PageDto<BookingDto> getAllBookings(Pageable pageable) {
         return bookingService.getAllBookings(pageable);
     }
 
     @Transactional
     @GetMapping
-    public Page<BookingDto> getFilteredBookings(
+    public PageDto<BookingDto> getFilteredBookings(
             Pageable pageable,
             @RequestParam(value = "startTime", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,

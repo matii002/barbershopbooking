@@ -1,11 +1,11 @@
 package pl.mp.barbershopbookingapi.rest.internal.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.ServiceEntity;
 import pl.mp.barbershopbookingapi.infrastructure.database.repository.ServiceRepository;
+import pl.mp.barbershopbookingapi.rest.internal.dto.PageDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.ServiceDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateServiceRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateServiceRequest;
@@ -21,8 +21,8 @@ public class ServiceBarberService {
     private final ServiceRepository serviceRepository;
     private final ServiceMapper serviceMapper;
 
-    public Page<ServiceDto> getAllBarberServices(Pageable pageable) {
-        return serviceRepository.findAll(pageable).map(serviceMapper::toServiceDto);
+    public PageDto<ServiceDto> getAllBarberServices(Pageable pageable) {
+        return new PageDto<>(serviceRepository.findAll(pageable).map(serviceMapper::toServiceDto));
     }
 
     public List<ServiceDto> get4MatchedBarberServices(String service) {

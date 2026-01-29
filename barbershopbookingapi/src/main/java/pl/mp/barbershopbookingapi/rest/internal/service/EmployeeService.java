@@ -1,12 +1,12 @@
 package pl.mp.barbershopbookingapi.rest.internal.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.EmployeeEntity;
 import pl.mp.barbershopbookingapi.infrastructure.database.repository.EmployeeRepository;
 import pl.mp.barbershopbookingapi.rest.internal.dto.EmployeeDto;
+import pl.mp.barbershopbookingapi.rest.internal.dto.PageDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.mapper.EmployeeMapper;
@@ -21,8 +21,8 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
 
-    public Page<EmployeeDto> getAllEmployees(Pageable pageable) {
-        return employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto);
+    public PageDto<EmployeeDto> getAllEmployees(Pageable pageable) {
+        return new PageDto<>(employeeRepository.findAll(pageable).map(employeeMapper::toEmployeeDto));
     }
 
     public List<EmployeeDto> get4MatchedEmployee(String firstName, String lastName) {
@@ -31,6 +31,7 @@ public class EmployeeService {
                 .map(employeeMapper::toEmployeeDto)
                 .collect(Collectors.toList());
     }
+
     public Optional<EmployeeDto> getEmployeeById(Integer id) {
         return employeeRepository.findById(id).map(employeeMapper::toEmployeeDto);
     }

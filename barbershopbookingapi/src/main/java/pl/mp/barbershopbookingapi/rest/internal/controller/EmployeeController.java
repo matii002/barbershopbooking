@@ -3,7 +3,6 @@ package pl.mp.barbershopbookingapi.rest.internal.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pl.mp.barbershopbookingapi.rest.internal.dto.EmployeeDto;
+import pl.mp.barbershopbookingapi.rest.internal.dto.PageDto;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.CreateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateEmployeeRequest;
 import pl.mp.barbershopbookingapi.rest.internal.service.EmployeeService;
@@ -27,7 +27,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public Page<EmployeeDto> getAllEmployees(Pageable pageable) {
+    public PageDto<EmployeeDto> getAllEmployees(Pageable pageable) {
         return employeeService.getAllEmployees(pageable);
     }
 
