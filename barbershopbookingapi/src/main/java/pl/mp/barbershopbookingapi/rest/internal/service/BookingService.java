@@ -19,9 +19,7 @@ import pl.mp.barbershopbookingapi.rest.internal.dto.request.UpdateBookingRequest
 import pl.mp.barbershopbookingapi.rest.internal.mapper.BookingMapper;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -36,14 +34,16 @@ public class BookingService {
         return bookingRepository.findAll(pageable).map(bookingMapper::toBookingDto);
     }
 
-    public List<BookingDto> getFilteredBookings(
+    public Page<BookingDto> getFilteredBookings(
+            Pageable pageable,
             LocalDateTime startTime,
             Status status,
             String client,
             String employee,
             String service
     ) {
-        List<BookingEntity> filteredBookings = bookingRepository.findBookingByFilters(
+        Page<BookingEntity> filteredBookings = bookingRepository.findBookingByFilters(
+                pageable,
                 startTime,
                 status,
                 client,
@@ -51,7 +51,7 @@ public class BookingService {
                 service
         );
 
-        return filteredBookings.stream().map(bookingMapper::toBookingDto).collect(Collectors.toList());
+        return filteredBookings.map(bookingMapper::toBookingDto);
     }
 
     public Optional<BookingDto> getBookingById(Integer id) {

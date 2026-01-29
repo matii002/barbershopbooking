@@ -1,11 +1,15 @@
 package pl.mp.barbershopbookingapi.infrastructure.database.repository.custom;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pl.mp.barbershopbookingapi.infrastructure.Status;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.BookingEntity;
@@ -19,7 +23,8 @@ import java.util.List;
 public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
     private final EntityManager em;
 
-    public List<BookingEntity> findBookingByFilters(
+    public Page<BookingEntity> findBookingByFilters(
+            Pageable pageable,
             LocalDateTime startTime,
             Status status,
             String client,
@@ -28,7 +33,6 @@ public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
     ) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<BookingEntity> cq = cb.createQuery(BookingEntity.class);
-
         Root<BookingEntity> booking = cq.from(BookingEntity.class);
         List<Predicate> predicates = new ArrayList<>();
 
@@ -66,6 +70,14 @@ public class BookingRepositoryCustomImpl implements BookingRepositoryCustom {
 
         cq.where(predicates.toArray(new Predicate[0]));
 
-        return em.createQuery(cq).getResultList();
+        TypedQuery<BookingEntity> tq = em.createQuery(cq);
+        tq.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        tq.setMaxResults(pageable.getPageSize());
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(BookingEntity.class)));
+        Long totalRows = em.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<BookingEntity>(tq.getResultList(), pageable, totalRows);
     }
 }

@@ -1,5 +1,6 @@
 package pl.mp.barbershopbookingapi.rest.internal.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,10 @@ public class BookingController {
         return bookingService.getAllBookings(pageable);
     }
 
+    @Transactional
     @GetMapping
-    public List<BookingDto> getFilteredBookings(
+    public Page<BookingDto> getFilteredBookings(
+            Pageable pageable,
             @RequestParam(value = "startTime", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
             @RequestParam(value = "status", required = false) Status status,
@@ -43,6 +46,7 @@ public class BookingController {
             @RequestParam(value = "employee", required = false) String employee,
             @RequestParam(value = "service", required = false) String service) {
         return bookingService.getFilteredBookings(
+                pageable,
                 startTime,
                 status,
                 client,

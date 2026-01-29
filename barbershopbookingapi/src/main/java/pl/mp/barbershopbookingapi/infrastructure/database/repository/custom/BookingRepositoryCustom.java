@@ -1,13 +1,15 @@
 package pl.mp.barbershopbookingapi.infrastructure.database.repository.custom;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import pl.mp.barbershopbookingapi.infrastructure.Status;
 import pl.mp.barbershopbookingapi.infrastructure.database.entity.BookingEntity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface BookingRepositoryCustom {
-    List<BookingEntity> findBookingByFilters(
+    Page<BookingEntity> findBookingByFilters(
+            Pageable pageable,
             LocalDateTime startTime,
             Status status,
             String client,
